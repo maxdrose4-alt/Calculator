@@ -1,3 +1,5 @@
+import time
+import threading
 try:
     import tkinter as tk
     from tkinter import messagebox
@@ -11,69 +13,57 @@ def math(): #calculator operations
     def multiply(x, y): return x * y
     def divide(x, y): return x / y if y != 0 else print("Error, division by 0")
 
-def buttons(): #them buttons
-    
-        btn_add = tk.Button(root, text="+", width=2, font=("Arial", 30), command="")
-        btn_add.grid(row=1, column=4, sticky="ew")
-
-        btn_subtract = tk.Button(root, text="-", width=2, font=("Arial", 30), command="")
-        btn_subtract.grid(row=2, column=4, sticky="ew")
-
-        btn_multiply = tk.Button(root, text="x", width=2, font=("Arial", 30), command="")
-        btn_multiply.grid(row=3, column=4, sticky="ew")
-
-        btn_divide = tk.Button(root, text="/", width=2, font=("Arial", 30), command="")
-        btn_divide.grid(row=4, column=4, sticky="ew")
-
-        btn1 = tk.Button(root, text="1", width=2, font=("Arial", 30), command="")
-        btn1.grid(row=1, column=1, sticky="ew")
-
-        btn2 = tk.Button(root, text="2", width=2, font=("Arial", 30), command="")
-        btn2.grid(row=1, column=2, sticky="ew")
-
-        btn3 = tk.Button(root, text="3", width=2, font=("Arial", 30), command="")
-        btn3.grid(row=1, column=3, sticky="ew")
-
-        btn4 = tk.Button(root, text="4", width=2, font=("Arial", 30), command="")
-        btn4.grid(row=2, column=1, sticky="ew")
-
-        btn5 = tk.Button(root, text="5", width=2, font=("Arial", 30), command="")
-        btn5.grid(row=2, column=2, sticky="ew")
-
-        btn6 = tk.Button(root, text="6", width=2, font=("Arial", 30), command="")
-        btn6.grid(row=2, column=3, sticky="ew")
-
-        btn7 = tk.Button(root, text="7", width=2, font=("Arial", 30), command="")
-        btn7.grid(row=3, column=1, sticky="ew")
-
-        btn8 = tk.Button(root, text="8", width=2, font=("Arial", 30), command="")
-        btn8.grid(row=3, column=2, sticky="ew")
-
-        btn9 = tk.Button(root, text="9", width=2, font=("Arial", 30), command="")
-        btn9.grid(row=3, column=3, sticky="ew")
-
-        btn0 = tk.Button(root, text="0", width=2, font=("Arial", 30), command="")
-        btn0.grid(row=4, column=2, sticky="ew")
-
-        btnac = tk.Button(root, text="AC", width=2, font=("Arial", 30), command="")
-        btnac.grid(row=4, column=1, sticky="ew")
-
-        btncalc = tk.Button(root, text="calc", width=2, font=("arial", 30), command="")
-        btncalc.grid(row=4, column=3, sticky="ew")
+ltxt = []
+label = None
 
 def label_updater():
-    label = tk.Label(root, text="", font=("Arial", 60))
-    label.grid(row=0, column=0, columnspan=2, pady=20)
+    global label
+    label = tk.Label(root, text="", font=("Arial", 30), wraplength=root.winfo_width())
+    label.grid(row=0, column=1, columnspan=3, pady=20, sticky="ew")
+    while True:
+        label.config(text=''.join(map(str, ltxt)))
+        time.sleep(0.1)
+        oplist = ("x", "-", "+", "/")
+        for target in oplist:
+            if target in ltxt:
+                position = ltxt.index(target)
 
+def buttons():
+    # Number buttons grid layout: rows 1-3, columns 1-3
+    button_map = {
+        '1': (1, 1), '2': (1, 2), '3': (1, 3),
+        '4': (2, 1), '5': (2, 2), '6': (2, 3),
+        '7': (3, 1), '8': (3, 2), '9': (3, 3),
+        '0': (4, 2)
+    }
+    
+    for num, (row, col) in button_map.items():
+        tk.Button(root, text=num, width=2, font=("Arial", 30),
+                  command=lambda n=num: ltxt.append(n)).grid(row=row, column=col, sticky="nsew")
+    
+    # Operation buttons in column 4
+    operations = [('+', 1), ('-', 2), ('x', 3), ('/', 4)]
+    for op, row in operations:
+        tk.Button(root, text=op, width=2, font=("Arial", 30),
+                  command=None).grid(row=row, column=4, sticky="nsew")
+    
+    # Special buttons: AC (clear) and calc (equals)
+    tk.Button(root, text="AC", width=2, font=("Arial", 30),
+              command=lambda: ltxt.clear()).grid(row=4, column=1, sticky="nsew")
+    tk.Button(root, text="calc", width=2, font=("Arial", 30),
+              command=None).grid(row=4, column=3, sticky="nsew")
 
-calc = []
-calc2 = []
-
-root = tk.Tk() #creating the window for the calc
+root = tk.Tk()
 root.geometry("310x400")
 root.title("Python Calculator")
 
-label_updater()
+for col in range(1, 5):
+    root.columnconfigure(col, weight=1)
+for row in range(0, 5):
+    root.rowconfigure(row, weight=1)
+
+labelthread = threading.Thread(target=label_updater, daemon=True)
+labelthread.start()
 buttons()
 
 root.mainloop()

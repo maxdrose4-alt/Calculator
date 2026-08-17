@@ -45,7 +45,7 @@ def buttons():
     bmap = {1: (1, 1), 2: (1, 2), 3: (1, 3),
             4: (2, 1), 5: (2, 2), 6: (2, 3),
             7: (3, 1), 8: (3, 2), 9: (3, 3),
-                       0: (4, 2)
+            0: (4, 1), ".": (4, 2)
                        }
     for num, (row, col) in bmap.items():#number buttons
         tk.Button(root, text=num, width=2, font=("Arial", 30),   command=lambda n = num: presskey(n)).grid(row=row, column= col, sticky="nsew")
@@ -58,13 +58,13 @@ def buttons():
         tk.Button(root, width=2, text=op, font=("Arial", 30),  command=lambda o = op: presskey(o)).grid(row=row, column=col, sticky="nsew")
 
     #the special buttons vol. 1 AC
-    tk.Button(root, text="AC", width=2, font=("Arial", 30), command=lambda: clear_label()).grid(row=4, column=1, sticky="nsew")
+    tk.Button(root, text="AC", width=2, font=("Arial", 30), command=lambda: clear_label()).grid(row=5, column=1, sticky="nsew")
 
     #the special buttons vol. 2 Backspace
     tk.Button(root, text="⌫", width=2, font=("arial", 30), command=lambda: remove_last()).grid(row=4, column=3, sticky="nsew")
 
 root = tk.Tk()
-root.geometry("300x400")
+root.geometry("300x450")
 root.title("python calculator")
 root.resizable(False, False)
 

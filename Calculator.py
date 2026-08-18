@@ -23,7 +23,20 @@ def math():
     def div(x, y): x/y
     def exp(x, y): x**y
     def roo(x): x**0.5
+
+    ops = {
+            "+":add,
+            "-":sub,
+            "*":mult,
+            "/":div,
+            "^":exp,
+            "√":roo
+                    }
 math()
+
+def matherror():
+    messagebox.showerror( "Error!!", "Please enter a valil calculatio\nyour calculation will now be deleted.")
+    clear_label()
 
 def remove_last():
     if len(ltxt) != 0: del ltxt[-1]
@@ -34,11 +47,17 @@ def clear_label():
     update_label()
 
 def calc():
-    None
+    calcu = "".join(map(str, ltxt))
+    for op in opmap.keys():
+        if op != "-":
+            if op in calcu:
+                if calcu.startswith(op): matherror()
+                
+
 
 def update_label():
     if len(ltxt)>36:
-        messagebox.showinfo("Too big", f"the calculatoin:\n{"".join(map(str, ltxt))}\nis to big for me press your super(windows) key and type 'calc' then hit enter\nyour calculation will now be deleted")
+        messagebox.showerror("Too big", f"the calculatoin:\n{"".join(map(str, ltxt))}\nis to big for me press your super(windows) key and type 'calc' then hit enter\nyour calculation will now be deleted")
         clear_label()
     label.config(text="".join(map(str, ltxt)))
 
@@ -54,6 +73,7 @@ def buttons():
                        }
     for num, (row, col) in bmap.items():#number buttons
         tk.Button(root, text=num, width=2, font=("Arial", 30),   command=lambda n = num: presskey(n)).grid(row=row, column= col, sticky="nsew")
+    global opmap 
     opmap = {"+": (2, 4), "^": (1, 2),
              "-": (3, 4), 
              "-": (3, 4), "√": (1, 3),
@@ -61,6 +81,7 @@ def buttons():
              "*": (4, 4),
              "/": (5, 4)
             }
+    
     for op, (row, col) in opmap.items(): #operation buttons
         tk.Button(root, width=2, text=op, font=("Arial", 30),  command=lambda o = op: presskey(o)).grid(row=row, column=col, sticky="nsew")
 
@@ -71,7 +92,8 @@ def buttons():
     tk.Button(root, text="⌫", width=2, font=("arial", 30), command=lambda: remove_last()).grid(row=5, column=3, sticky="nsew")
 
     #the special buttons vol. 3 "="
-    tk.Button(root, text="=", width=2, font=("Arial", 30), command=calc()).grid(row= 1, column=4)
+    tk.Button(root, text="=", width=2, font=("Arial", 30), command=calc).grid(row= 1, column=4)
+
 
 root = tk.Tk()
 root.geometry("290x445")
@@ -82,4 +104,3 @@ label = tk.Label(root, text="", font=("arial", 30), wraplength=280, height=3, an
 label.grid(row=0, column=1,columnspan=4)
 buttons()
 root.mainloop()
-#ADD THEM CALCULATIONS

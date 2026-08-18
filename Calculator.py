@@ -37,7 +37,7 @@ def math():
 math()
 
 def matherror():
-    messagebox.showerror( "Error!!", "Please enter a valil calculatio\nyour calculation will now be deleted.")
+    messagebox.showerror( "Error!!", "Please enter a valid calculatio\nyour calculation will now be deleted.")
     clear_label()
 
 def remove_last():
@@ -54,6 +54,8 @@ def calc():
         if op != "-":
             if op in calcu:
                 if calcu.startswith(op): matherror()
+        for opa in opmap.keys(): 
+            if op+opa in calcu: matherror()
                 
 
 

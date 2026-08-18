@@ -1,4 +1,5 @@
 import sys
+import time
 try:
     import tkinter as tk
     from tkinter import messagebox
@@ -12,7 +13,8 @@ except ImportError:
         elif awnser == "n":
             print("okay bye")
             sys.exit()
-        else: print(f"type y or n not sum {awnser} bullshit")
+        else: print(f"type y or n not sum {awnser} bullshit\nbut i like you\nso here have a poem:\n\nroses are red so much is true\nbut your inputs are not\nso fuck you")
+        time.sleep(10)
 
 ltxt = []
 

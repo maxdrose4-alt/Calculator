@@ -54,10 +54,11 @@ def calc():
         if op != "-":
             if op in calcu:
                 if calcu.startswith(op): matherror()
-        for opa in opmap.keys(): 
-            if op+opa in calcu: matherror()
-                
-
+            for opa in opmap.keys(): 
+                    if op+opa in calcu: matherror()
+    awnser = eval(calcu)
+    messagebox.showinfo("", awnser)
+    clear_label()
 
 def update_label():
     if len(ltxt)>36:
@@ -83,7 +84,7 @@ def buttons():
              "-": (3, 4), "√": (1, 3),
              "-": (3, 4), 
              "*": (4, 4),
-             "/": (5, 4)
+                "/": (5, 4)
             }
     
     for op, (row, col) in opmap.items(): #operation buttons

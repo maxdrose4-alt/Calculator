@@ -25,15 +25,6 @@ def math():
     def div(x, y): x/y
     def exp(x, y): x**y
     def roo(x): x**0.5
-
-    ops = {
-            "+":add,
-            "-":sub,
-            "*":mult,
-            "/":div,
-            "^":exp,
-            "√":roo
-                    }
 math()
 
 def matherror():
@@ -56,9 +47,11 @@ def calc():
                 if calcu.startswith(op): matherror()
             for opa in opmap.keys(): 
                     if op+opa in calcu: matherror()
-    awnser = eval(calcu)
-    messagebox.showinfo("", awnser)
-    clear_label()
+    if not "^" in calcu and "√":
+        awnser = eval(calcu)
+        messagebox.showinfo("", awnser)
+        clear_label()
+    else: messagebox.showerror("Error", "This operation dosnt exist yet")
 
 def update_label():
     if len(ltxt)>36:
